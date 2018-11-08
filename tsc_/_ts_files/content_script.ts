@@ -6,12 +6,12 @@ interface wordProps {
 }
 
 class Productify_Collector {
-    protected getAllText: string;
-    protected totalWords: number;
-    protected wordsArray: string[] = new Array();
-    protected totalWordsLength: number;
+    private getAllText: string;
+    private totalWords: number;
+    private wordsArray: string[] = new Array();
+    private totalWordsLength: number;
     protected getAllTextFiltered: string;
-    protected lengthCounter: number=0;
+    private lengthCounter: number=0;
     protected wordsArrayFinal: string[] = new Array();
 
     constructor() {
@@ -52,7 +52,6 @@ class Productify_Collector {
             }
         }
         this.displays();
-        setTimeout(()=> this.displays(), 2000);
     }
 
     displays() {
@@ -78,8 +77,9 @@ class Productify_Collector_Processor extends Productify_Collector {
         let count: number=0;
         // check similar types
         for(let a in this.frequencyEachWord) {
-            if (this.frequencyEachWord.hasOwnProperty(a) && this.frequencyEachWord[a] === word) {
-                console.warn('same word found in dictionary: '+word);
+            // console.log(a)
+            if (this.frequencyEachWord.hasOwnProperty(a) && a === word) {
+                // console.warn('same word found in dictionary: '+word);
                 return;
             }
         }
@@ -87,6 +87,7 @@ class Productify_Collector_Processor extends Productify_Collector {
         for(let x in this.wordsArrayFinal) {
             if (this.wordsArrayFinal[x] === word) {
                 count++;
+                
             }
         }
         this.frequencyEachWord[word] = count; // making a dictionary
@@ -98,9 +99,18 @@ class Productify_Collector_Processor extends Productify_Collector {
         }
         this.displaysA();
     }
+
     displaysA() {
         console.warn('word frequency below');
         console.warn(this.frequencyEachWord)
+    }
+
+    main(wordBlock: wordProps, word: string) {
+        for(let x in this.frequencyEachWord) {
+            if (this.frequencyEachWord.hasOwnProperty(x) && this.frequencyEachWord[x] === word) {
+                let a: number=0;
+            }
+        }
     }
 }
 

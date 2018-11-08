@@ -46,14 +46,12 @@ var Productify_Collector = /** @class */ (function () {
         }
     };
     Productify_Collector.prototype.removeEmptyTypes = function (arr) {
-        var _this = this;
         for (var ele in arr) {
             if (arr[ele].length) {
                 this.wordsArrayFinal.push(arr[ele]);
             }
         }
         this.displays();
-        setTimeout(function () { return _this.displays(); }, 2000);
     };
     Productify_Collector.prototype.displays = function () {
         console.warn('Entire wordsArray of the current webpage is below');
@@ -72,8 +70,9 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
         var count = 0;
         // check similar types
         for (var a in this.frequencyEachWord) {
-            if (this.frequencyEachWord.hasOwnProperty(a) && this.frequencyEachWord[a] === word) {
-                console.warn('same word found in dictionary: ' + word);
+            // console.log(a)
+            if (this.frequencyEachWord.hasOwnProperty(a) && a === word) {
+                // console.warn('same word found in dictionary: '+word);
                 return;
             }
         }
@@ -93,6 +92,13 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
     Productify_Collector_Processor.prototype.displaysA = function () {
         console.warn('word frequency below');
         console.warn(this.frequencyEachWord);
+    };
+    Productify_Collector_Processor.prototype.main = function (wordBlock, word) {
+        for (var x in this.frequencyEachWord) {
+            if (this.frequencyEachWord.hasOwnProperty(x) && this.frequencyEachWord[x] === word) {
+                var a = 0;
+            }
+        }
     };
     return Productify_Collector_Processor;
 }(Productify_Collector));
