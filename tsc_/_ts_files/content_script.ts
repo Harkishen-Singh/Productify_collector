@@ -6,13 +6,13 @@ interface wordProps {
 }
 
 class Productify_Collector {
-    private getAllText: string;
-    private totalWords: number;
-    private wordsArray: string[] = new Array();
-    private totalWordsLength: number;
-    private getAllTextFiltered: string;
-    private lengthCounter: number=0;
-    private wordsArrayFinal: string[] = new Array();
+    protected getAllText: string;
+    protected totalWords: number;
+    protected wordsArray: string[] = new Array();
+    protected totalWordsLength: number;
+    protected getAllTextFiltered: string;
+    protected lengthCounter: number=0;
+    protected wordsArrayFinal: string[] = new Array();
 
     constructor() {
         this.getAllText = document.body.innerText;
@@ -61,6 +61,60 @@ class Productify_Collector {
     }
 
 }
+
+class Productify_Collector_Processor extends Productify_Collector {
+
+    private indepWordWt: number;
+    private depWordWt: number;
+    private frequencyEachWord: any;
+
+    constructor() {
+        super();
+        this.frequencyEachWord = {};
+
+    }
+
+    calculateFrequencyEachWord(word: string) {
+        let count: number=0;
+        // check similar types
+        for(let a in this.frequencyEachWord) {
+            if (this.frequencyEachWord.hasOwnProperty(a) && this.frequencyEachWord[a] === word) {
+                console.warn('same word found in dictionary: '+word);
+                return;
+            }
+        }
+
+        for(let x in this.wordsArrayFinal) {
+            if (this.wordsArrayFinal[x] === word) {
+                count++;
+            }
+        }
+        this.frequencyEachWord[word] = count; // making a dictionary
+    }
+
+    frequencyController() {
+        for(let y in this.wordsArrayFinal) {
+            this.calculateFrequencyEachWord(this.wordsArrayFinal[y]);
+        }
+        this.displaysA();
+    }
+    displaysA() {
+        console.warn('word frequency below');
+        console.warn(this.frequencyEachWord)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
  
-let obj: Productify_Collector = new Productify_Collector()
+let obj: Productify_Collector_Processor = new Productify_Collector_Processor()
 obj.filterController();
+obj.frequencyController();

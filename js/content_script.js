@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Productify_Collector = /** @class */ (function () {
     function Productify_Collector() {
         this.wordsArray = new Array();
@@ -48,5 +61,41 @@ var Productify_Collector = /** @class */ (function () {
     };
     return Productify_Collector;
 }());
-var obj = new Productify_Collector();
+var Productify_Collector_Processor = /** @class */ (function (_super) {
+    __extends(Productify_Collector_Processor, _super);
+    function Productify_Collector_Processor() {
+        var _this = _super.call(this) || this;
+        _this.frequencyEachWord = {};
+        return _this;
+    }
+    Productify_Collector_Processor.prototype.calculateFrequencyEachWord = function (word) {
+        var count = 0;
+        // check similar types
+        for (var a in this.frequencyEachWord) {
+            if (this.frequencyEachWord.hasOwnProperty(a) && this.frequencyEachWord[a] === word) {
+                console.warn('same word found in dictionary: ' + word);
+                return;
+            }
+        }
+        for (var x in this.wordsArrayFinal) {
+            if (this.wordsArrayFinal[x] === word) {
+                count++;
+            }
+        }
+        this.frequencyEachWord[word] = count; // making a dictionary
+    };
+    Productify_Collector_Processor.prototype.frequencyController = function () {
+        for (var y in this.wordsArrayFinal) {
+            this.calculateFrequencyEachWord(this.wordsArrayFinal[y]);
+        }
+        this.displaysA();
+    };
+    Productify_Collector_Processor.prototype.displaysA = function () {
+        console.warn('word frequency below');
+        console.warn(this.frequencyEachWord);
+    };
+    return Productify_Collector_Processor;
+}(Productify_Collector));
+var obj = new Productify_Collector_Processor();
 obj.filterController();
+obj.frequencyController();
