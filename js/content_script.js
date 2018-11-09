@@ -116,17 +116,23 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
     Productify_Collector_Processor.prototype.createHTMLTags = function () {
         console.log('reached createTags');
         var plusButton = document.createElement('span'), image = document.createElement('img');
+        plusButton.style.padding = '20px';
+        plusButton.style.minWidth = '80px';
+        plusButton.style.backgroundColor = '#DCEDC8';
+        plusButton.style.borderRadius = '10px';
         image.src = this.customIcons[0];
         image.style.position = 'fixed';
         image.style.left = '5%';
         image.style.bottom = '15%';
         image.style.height = "50px";
         image.onclick = function () {
-            alert('clicked');
             var inputSelect = document.createElement('select'), opt1 = document.createElement('option'), opt2 = document.createElement('option'), opt3 = document.createElement('option'), opt4 = document.createElement('option'), opt5 = document.createElement('option'), opt6 = document.createElement('option'), opt7 = document.createElement('option'), opt8 = document.createElement('option');
-            inputSelect.style.position = 'fixed';
-            inputSelect.style.left = '5%';
-            inputSelect.style.bottom = '10%';
+            plusButton.style.position = 'fixed';
+            plusButton.style.left = '5%';
+            plusButton.style.bottom = '10%';
+            inputSelect.style.backgroundColor = '#fff';
+            inputSelect.style.padding = '7px';
+            inputSelect.style.borderRadius = '5px';
             // asssigning values and innerHTML content
             opt1.value = 'software';
             opt2.value = 'doctor';
@@ -152,11 +158,29 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
             inputSelect.appendChild(opt6);
             inputSelect.appendChild(opt7);
             inputSelect.appendChild(opt8);
-            document.body.appendChild(inputSelect);
+            var message = document.createElement('p');
+            message.innerHTML = 'Select the <b>most appropriate tag</b> for this Page:<br/>';
+            plusButton.appendChild(message);
+            plusButton.appendChild(inputSelect);
+            var submitB = document.createElement('button');
+            submitB.innerHTML = 'Save';
+            submitB.style.backgroundColor = 'blue';
+            submitB.style.color = 'white';
+            submitB.style.padding = '5px';
+            submitB.style.borderRadius = '4px';
+            submitB.style.marginLeft = '20px';
+            submitB.onclick = function () {
+                document.body.removeChild(plusButton);
+                plusButton.removeChild(submitB);
+                plusButton.removeChild(message);
+                plusButton.removeChild(inputSelect);
+            };
+            plusButton.appendChild(submitB);
+            document.body.appendChild(plusButton);
+            document.body.removeChild(image);
         };
         // making input elements
-        plusButton.appendChild(image);
-        document.body.appendChild(plusButton);
+        document.body.appendChild(image);
     };
     return Productify_Collector_Processor;
 }(Productify_Collector));
