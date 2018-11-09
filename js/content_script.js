@@ -17,10 +17,12 @@ var Productify_Collector = /** @class */ (function () {
         this.wordsArray = new Array();
         this.lengthCounter = 0;
         this.wordsArrayFinal = new Array();
+        this.customIcons = new Array();
         this.getAllText = document.body.innerText;
         this.totalWordsLength = this.getAllText.length;
         // this.lengthCounter = this.totalWordsLength;
         // this.wordsArray = this.getAllText.split(' ');
+        this.customIcons.push(chrome.extension.getURL('plus.png'));
     }
     Productify_Collector.prototype.illegalWordsFilter = function (letter) {
         if ((letter.charCodeAt(0) >= 65 && letter.charCodeAt(0) <= 90) || (letter.charCodeAt(0) >= 97 && letter.charCodeAt(0) <= 122)) {
@@ -51,6 +53,7 @@ var Productify_Collector = /** @class */ (function () {
                 this.wordsArrayFinal.push(arr[ele]);
             }
         }
+        this.totalWords = this.wordsArrayFinal.length;
         this.displays();
     };
     Productify_Collector.prototype.displays = function () {
@@ -64,6 +67,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
     function Productify_Collector_Processor() {
         var _this = _super.call(this) || this;
         _this.frequencyEachWord = {};
+        _this.processedArraySendServer = new Array();
         return _this;
     }
     Productify_Collector_Processor.prototype.calculateFrequencyEachWord = function (word) {
@@ -87,6 +91,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
         for (var y in this.wordsArrayFinal) {
             this.calculateFrequencyEachWord(this.wordsArrayFinal[y]);
         }
+        this.createHTMLTags();
         this.displaysA();
     };
     Productify_Collector_Processor.prototype.displaysA = function () {
@@ -95,10 +100,63 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
     };
     Productify_Collector_Processor.prototype.main = function (wordBlock, word) {
         for (var x in this.frequencyEachWord) {
-            if (this.frequencyEachWord.hasOwnProperty(x) && this.frequencyEachWord[x] === word) {
+            if (this.frequencyEachWord.hasOwnProperty(x) && x === word) {
                 var a = 0;
+                this.indepWordWt = this.frequencyEachWord[x] / 1;
+                this.depWordWt = this.frequencyEachWord[x] / this.totalWords;
+                this.depWordWt /= 1;
+                wordBlock.word = word;
+                wordBlock.indepWordWt = this.indepWordWt;
+                wordBlock.depWordWt = this.depWordWt;
             }
         }
+    };
+    Productify_Collector_Processor.prototype.mainController = function (wordsArray) {
+    };
+    Productify_Collector_Processor.prototype.createHTMLTags = function () {
+        console.log('reached createTags');
+        var plusButton = document.createElement('span'), image = document.createElement('img');
+        image.src = this.customIcons[0];
+        image.style.position = 'fixed';
+        image.style.left = '5%';
+        image.style.bottom = '15%';
+        image.style.height = "50px";
+        image.onclick = function () {
+            alert('clicked');
+            var inputSelect = document.createElement('select'), opt1 = document.createElement('option'), opt2 = document.createElement('option'), opt3 = document.createElement('option'), opt4 = document.createElement('option'), opt5 = document.createElement('option'), opt6 = document.createElement('option'), opt7 = document.createElement('option'), opt8 = document.createElement('option');
+            inputSelect.style.position = 'fixed';
+            inputSelect.style.left = '5%';
+            inputSelect.style.bottom = '10%';
+            // asssigning values and innerHTML content
+            opt1.value = 'software';
+            opt2.value = 'doctor';
+            opt3.value = 'games';
+            opt4.value = 'lawyer';
+            opt5.value = 'lifestyle';
+            opt6.value = 'movies';
+            opt7.value = 'study';
+            opt8.value = 'ecommerce';
+            opt1.innerHTML = 'software';
+            opt2.innerHTML = 'doctor';
+            opt3.innerHTML = 'games';
+            opt4.innerHTML = 'lawyer';
+            opt5.innerHTML = 'lifestyle';
+            opt6.innerHTML = 'movies';
+            opt7.innerHTML = 'study';
+            opt8.innerHTML = 'ecommerce';
+            inputSelect.appendChild(opt1);
+            inputSelect.appendChild(opt2);
+            inputSelect.appendChild(opt3);
+            inputSelect.appendChild(opt4);
+            inputSelect.appendChild(opt5);
+            inputSelect.appendChild(opt6);
+            inputSelect.appendChild(opt7);
+            inputSelect.appendChild(opt8);
+            document.body.appendChild(inputSelect);
+        };
+        // making input elements
+        plusButton.appendChild(image);
+        document.body.appendChild(plusButton);
     };
     return Productify_Collector_Processor;
 }(Productify_Collector));

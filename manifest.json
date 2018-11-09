@@ -19,7 +19,7 @@
         }
     ],
     "web_accessible_resources": [
-        "icons/save.png"
+        "plus.png"
       ],
     "background":{
         "scripts":["js/background.js"],

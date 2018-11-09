@@ -7,18 +7,20 @@ interface wordProps {
 
 class Productify_Collector {
     private getAllText: string;
-    private totalWords: number;
+    protected totalWords: number;
     private wordsArray: string[] = new Array();
     private totalWordsLength: number;
     protected getAllTextFiltered: string;
     private lengthCounter: number=0;
     protected wordsArrayFinal: string[] = new Array();
+    protected customIcons: any[] = new Array();
 
     constructor() {
         this.getAllText = document.body.innerText;
         this.totalWordsLength = this.getAllText.length;
         // this.lengthCounter = this.totalWordsLength;
         // this.wordsArray = this.getAllText.split(' ');
+        this.customIcons.push(chrome.extension.getURL('plus.png'));
     }
 
     illegalWordsFilter(letter: string) {
@@ -51,6 +53,7 @@ class Productify_Collector {
                 this.wordsArrayFinal.push(arr[ele]);
             }
         }
+        this.totalWords = this.wordsArrayFinal.length;
         this.displays();
     }
 
@@ -66,11 +69,12 @@ class Productify_Collector_Processor extends Productify_Collector {
     private indepWordWt: number;
     private depWordWt: number;
     private frequencyEachWord: any;
+    private processedArraySendServer : object[];
 
     constructor() {
         super();
         this.frequencyEachWord = {};
-
+        this.processedArraySendServer = new Array();
     }
 
     calculateFrequencyEachWord(word: string) {
@@ -97,6 +101,7 @@ class Productify_Collector_Processor extends Productify_Collector {
         for(let y in this.wordsArrayFinal) {
             this.calculateFrequencyEachWord(this.wordsArrayFinal[y]);
         }
+        this.createHTMLTags();
         this.displaysA();
     }
 
@@ -107,11 +112,81 @@ class Productify_Collector_Processor extends Productify_Collector {
 
     main(wordBlock: wordProps, word: string) {
         for(let x in this.frequencyEachWord) {
-            if (this.frequencyEachWord.hasOwnProperty(x) && this.frequencyEachWord[x] === word) {
+            if (this.frequencyEachWord.hasOwnProperty(x) && x === word) {
                 let a: number=0;
+                this.indepWordWt = this.frequencyEachWord[x] / 1;
+                this.depWordWt = this.frequencyEachWord[x] / this.totalWords;
+                this.depWordWt /= 1;
+                wordBlock.word = word;
+                wordBlock.indepWordWt = this.indepWordWt;
+                wordBlock.depWordWt = this.depWordWt;
             }
         }
     }
+
+    mainController(wordsArray: string[]) {
+
+    }
+
+    createHTMLTags() {
+        console.log('reached createTags')
+        let plusButton: HTMLSpanElement = document.createElement('span'),
+            image: HTMLImageElement = document.createElement('img');
+        image.src = this.customIcons[0];
+        image.style.position = 'fixed';
+        image.style.left = '5%';
+        image.style.bottom ='15%';
+        image.style.height = "50px";
+        image.onclick = () => {
+            alert('clicked')
+            let inputSelect: HTMLSelectElement = document.createElement('select'),
+                opt1: HTMLOptionElement = document.createElement('option'),
+                opt2: HTMLOptionElement = document.createElement('option'),
+                opt3: HTMLOptionElement = document.createElement('option'),
+                opt4: HTMLOptionElement = document.createElement('option'),
+                opt5: HTMLOptionElement = document.createElement('option'),
+                opt6: HTMLOptionElement = document.createElement('option'),
+                opt7: HTMLOptionElement = document.createElement('option'),
+                opt8: HTMLOptionElement = document.createElement('option');
+            inputSelect.style.position = 'fixed';
+            inputSelect.style.left = '5%';
+            inputSelect.style.bottom ='10%';
+            
+            // asssigning values and innerHTML content
+            opt1.value ='software';
+            opt2.value ='doctor';
+            opt3.value ='games';
+            opt4.value ='lawyer';
+            opt5.value ='lifestyle';
+            opt6.value ='movies';
+            opt7.value ='study';
+            opt8.value ='ecommerce';
+            opt1.innerHTML ='software';
+            opt2.innerHTML ='doctor';
+            opt3.innerHTML ='games';
+            opt4.innerHTML ='lawyer';
+            opt5.innerHTML ='lifestyle';
+            opt6.innerHTML ='movies';
+            opt7.innerHTML ='study';
+            opt8.innerHTML ='ecommerce';
+            inputSelect.appendChild(opt1);
+            inputSelect.appendChild(opt2);
+            inputSelect.appendChild(opt3);
+            inputSelect.appendChild(opt4);
+            inputSelect.appendChild(opt5);
+            inputSelect.appendChild(opt6);
+            inputSelect.appendChild(opt7);
+            inputSelect.appendChild(opt8);
+            document.body.appendChild(inputSelect)
+        };
+
+        // making input elements
+
+        
+        plusButton.appendChild(image);
+        document.body.appendChild(plusButton);
+    }
+
 }
 
 
