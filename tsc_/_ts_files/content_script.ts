@@ -50,7 +50,14 @@ class Productify_Collector {
     removeEmptyTypes(arr: string[]) {
         for(let ele in arr) {
             if(arr[ele].length) {
-                this.wordsArrayFinal.push(arr[ele]);
+                let found:boolean = false;
+                for(let u in this.wordsArrayFinal) {
+                    if(this.wordsArrayFinal[u] === arr[ele]) {
+                        found = true;
+                    }
+                }
+                if (found===false)
+                    this.wordsArrayFinal.push(arr[ele]);
             }
         }
         this.totalWords = this.wordsArrayFinal.length;
@@ -70,6 +77,7 @@ class Productify_Collector_Processor extends Productify_Collector {
     private depWordWt: number;
     private frequencyEachWord: any;
     private processedArraySendServer : object[];
+    private tagValue: string;
 
     constructor() {
         super();
@@ -81,9 +89,7 @@ class Productify_Collector_Processor extends Productify_Collector {
         let count: number=0;
         // check similar types
         for(let a in this.frequencyEachWord) {
-            // console.log(a)
             if (this.frequencyEachWord.hasOwnProperty(a) && a === word) {
-                // console.warn('same word found in dictionary: '+word);
                 return;
             }
         }
@@ -113,23 +119,28 @@ class Productify_Collector_Processor extends Productify_Collector {
     main(wordBlock: wordProps, word: string) {
         for(let x in this.frequencyEachWord) {
             if (this.frequencyEachWord.hasOwnProperty(x) && x === word) {
-                let a: number=0;
                 this.indepWordWt = this.frequencyEachWord[x] / 1;
                 this.depWordWt = this.frequencyEachWord[x] / this.totalWords;
                 this.depWordWt /= 1;
                 wordBlock.word = word;
                 wordBlock.indepWordWt = this.indepWordWt;
                 wordBlock.depWordWt = this.depWordWt;
+                wordBlock.tags.push(this.tagValue);
+                this.processedArraySendServer.push(wordBlock);
+                return wordBlock;
             }
         }
     }
 
     mainController(wordsArray: string[]) {
-
+        for(let w in wordsArray) {
+            this.main({word:'', indepWordWt:0, depWordWt:0, tags:[]}, wordsArray[w]);
+        }
+        console.warn('processed array to be sent to the server is below')
+        console.warn(this.processedArraySendServer);
     }
 
     createHTMLTags() {
-        console.log('reached createTags')
         let plusButton: HTMLSpanElement = document.createElement('span'),
             image: HTMLImageElement = document.createElement('img');
         plusButton.style.padding = '20px';
@@ -150,6 +161,8 @@ class Productify_Collector_Processor extends Productify_Collector {
                 opt5: HTMLOptionElement = document.createElement('option'),
                 opt6: HTMLOptionElement = document.createElement('option'),
                 opt7: HTMLOptionElement = document.createElement('option'),
+                opt9: HTMLOptionElement = document.createElement('option'),
+                opt10: HTMLOptionElement = document.createElement('option'),
                 opt8: HTMLOptionElement = document.createElement('option');
             plusButton.style.position = 'fixed';
             plusButton.style.left = '5%';
@@ -159,21 +172,25 @@ class Productify_Collector_Processor extends Productify_Collector {
             inputSelect.style.borderRadius = '5px';
             // asssigning values and innerHTML content
             opt1.value ='software';
-            opt2.value ='doctor';
+            opt2.value ='doctorAndHealth';
             opt3.value ='games';
             opt4.value ='lawyer';
             opt5.value ='lifestyle';
             opt6.value ='movies';
             opt7.value ='study';
             opt8.value ='ecommerce';
-            opt1.innerHTML ='software';
-            opt2.innerHTML ='doctor';
-            opt3.innerHTML ='games';
-            opt4.innerHTML ='lawyer';
-            opt5.innerHTML ='lifestyle';
-            opt6.innerHTML ='movies';
-            opt7.innerHTML ='study';
-            opt8.innerHTML ='ecommerce';
+            opt9.value = 'socialMedia';
+            opt10.value = 'others';
+            opt1.innerHTML ='Software and Information Technology';
+            opt2.innerHTML ='Doctor & Health';
+            opt3.innerHTML ='Games';
+            opt4.innerHTML ='Lawyer';
+            opt5.innerHTML ='Lifestyle';
+            opt6.innerHTML ='Movies';
+            opt7.innerHTML ='Study';
+            opt9.innerHTML = 'Social Media';
+            opt8.innerHTML ='E-Commerce';
+            opt10.innerHTML = 'General / Others';
             inputSelect.appendChild(opt1);
             inputSelect.appendChild(opt2);
             inputSelect.appendChild(opt3);
@@ -182,6 +199,8 @@ class Productify_Collector_Processor extends Productify_Collector {
             inputSelect.appendChild(opt6);
             inputSelect.appendChild(opt7);
             inputSelect.appendChild(opt8);
+            inputSelect.appendChild(opt9);
+            inputSelect.appendChild(opt10);
             let message: HTMLParagraphElement = document.createElement('p');
             message.innerHTML = 'Select the <b>most appropriate tag</b> for this Page:<br/>';
             plusButton.appendChild(message)
@@ -194,10 +213,12 @@ class Productify_Collector_Processor extends Productify_Collector {
             submitB.style.borderRadius = '4px';
             submitB.style.marginLeft = '20px';
             submitB.onclick = () => {
+                this.tagValue = inputSelect.value;
                 document.body.removeChild(plusButton);
                 plusButton.removeChild(submitB);
                 plusButton.removeChild(message);
-                plusButton.removeChild(inputSelect)
+                plusButton.removeChild(inputSelect);
+                this.mainController(this.wordsArrayFinal);
             };
             plusButton.appendChild(submitB)
             document.body.appendChild(plusButton)

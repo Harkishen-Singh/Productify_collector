@@ -50,7 +50,14 @@ var Productify_Collector = /** @class */ (function () {
     Productify_Collector.prototype.removeEmptyTypes = function (arr) {
         for (var ele in arr) {
             if (arr[ele].length) {
-                this.wordsArrayFinal.push(arr[ele]);
+                var found = false;
+                for (var u in this.wordsArrayFinal) {
+                    if (this.wordsArrayFinal[u] === arr[ele]) {
+                        found = true;
+                    }
+                }
+                if (found === false)
+                    this.wordsArrayFinal.push(arr[ele]);
             }
         }
         this.totalWords = this.wordsArrayFinal.length;
@@ -74,9 +81,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
         var count = 0;
         // check similar types
         for (var a in this.frequencyEachWord) {
-            // console.log(a)
             if (this.frequencyEachWord.hasOwnProperty(a) && a === word) {
-                // console.warn('same word found in dictionary: '+word);
                 return;
             }
         }
@@ -101,20 +106,27 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
     Productify_Collector_Processor.prototype.main = function (wordBlock, word) {
         for (var x in this.frequencyEachWord) {
             if (this.frequencyEachWord.hasOwnProperty(x) && x === word) {
-                var a = 0;
                 this.indepWordWt = this.frequencyEachWord[x] / 1;
                 this.depWordWt = this.frequencyEachWord[x] / this.totalWords;
                 this.depWordWt /= 1;
                 wordBlock.word = word;
                 wordBlock.indepWordWt = this.indepWordWt;
                 wordBlock.depWordWt = this.depWordWt;
+                wordBlock.tags.push(this.tagValue);
+                this.processedArraySendServer.push(wordBlock);
+                return wordBlock;
             }
         }
     };
     Productify_Collector_Processor.prototype.mainController = function (wordsArray) {
+        for (var w in wordsArray) {
+            this.main({ word: '', indepWordWt: 0, depWordWt: 0, tags: [] }, wordsArray[w]);
+        }
+        console.warn('processed array to be sent to the server is below');
+        console.warn(this.processedArraySendServer);
     };
     Productify_Collector_Processor.prototype.createHTMLTags = function () {
-        console.log('reached createTags');
+        var _this = this;
         var plusButton = document.createElement('span'), image = document.createElement('img');
         plusButton.style.padding = '20px';
         plusButton.style.minWidth = '80px';
@@ -126,7 +138,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
         image.style.bottom = '15%';
         image.style.height = "50px";
         image.onclick = function () {
-            var inputSelect = document.createElement('select'), opt1 = document.createElement('option'), opt2 = document.createElement('option'), opt3 = document.createElement('option'), opt4 = document.createElement('option'), opt5 = document.createElement('option'), opt6 = document.createElement('option'), opt7 = document.createElement('option'), opt8 = document.createElement('option');
+            var inputSelect = document.createElement('select'), opt1 = document.createElement('option'), opt2 = document.createElement('option'), opt3 = document.createElement('option'), opt4 = document.createElement('option'), opt5 = document.createElement('option'), opt6 = document.createElement('option'), opt7 = document.createElement('option'), opt9 = document.createElement('option'), opt10 = document.createElement('option'), opt8 = document.createElement('option');
             plusButton.style.position = 'fixed';
             plusButton.style.left = '5%';
             plusButton.style.bottom = '10%';
@@ -135,21 +147,25 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
             inputSelect.style.borderRadius = '5px';
             // asssigning values and innerHTML content
             opt1.value = 'software';
-            opt2.value = 'doctor';
+            opt2.value = 'doctorAndHealth';
             opt3.value = 'games';
             opt4.value = 'lawyer';
             opt5.value = 'lifestyle';
             opt6.value = 'movies';
             opt7.value = 'study';
             opt8.value = 'ecommerce';
-            opt1.innerHTML = 'software';
-            opt2.innerHTML = 'doctor';
-            opt3.innerHTML = 'games';
-            opt4.innerHTML = 'lawyer';
-            opt5.innerHTML = 'lifestyle';
-            opt6.innerHTML = 'movies';
-            opt7.innerHTML = 'study';
-            opt8.innerHTML = 'ecommerce';
+            opt9.value = 'socialMedia';
+            opt10.value = 'others';
+            opt1.innerHTML = 'Software and Information Technology';
+            opt2.innerHTML = 'Doctor & Health';
+            opt3.innerHTML = 'Games';
+            opt4.innerHTML = 'Lawyer';
+            opt5.innerHTML = 'Lifestyle';
+            opt6.innerHTML = 'Movies';
+            opt7.innerHTML = 'Study';
+            opt9.innerHTML = 'Social Media';
+            opt8.innerHTML = 'E-Commerce';
+            opt10.innerHTML = 'General / Others';
             inputSelect.appendChild(opt1);
             inputSelect.appendChild(opt2);
             inputSelect.appendChild(opt3);
@@ -158,6 +174,8 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
             inputSelect.appendChild(opt6);
             inputSelect.appendChild(opt7);
             inputSelect.appendChild(opt8);
+            inputSelect.appendChild(opt9);
+            inputSelect.appendChild(opt10);
             var message = document.createElement('p');
             message.innerHTML = 'Select the <b>most appropriate tag</b> for this Page:<br/>';
             plusButton.appendChild(message);
@@ -170,10 +188,12 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
             submitB.style.borderRadius = '4px';
             submitB.style.marginLeft = '20px';
             submitB.onclick = function () {
+                _this.tagValue = inputSelect.value;
                 document.body.removeChild(plusButton);
                 plusButton.removeChild(submitB);
                 plusButton.removeChild(message);
                 plusButton.removeChild(inputSelect);
+                _this.mainController(_this.wordsArrayFinal);
             };
             plusButton.appendChild(submitB);
             document.body.appendChild(plusButton);
