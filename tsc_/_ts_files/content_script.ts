@@ -6,6 +6,15 @@ interface wordProps {
     occurence: number;
 }
 
+interface Server {
+    currentURL: string;
+    currentTITLE: string;
+    data: any[];
+    time: string;
+    userName ?: string;
+
+}
+
 class Productify_Collector {
     private getAllText: string;
     protected totalWords: number;
@@ -135,13 +144,21 @@ class Productify_Collector_Processor extends Productify_Collector {
         }
     }
 
-    mainController(wordsArray: string[]) {
+    mainController(wordsArray: string[], serverObject: Server) {
         for(let w in wordsArray) {
             this.main({word:'', indepWordWt:0, depWordWt:0, tags:[], occurence:0}, wordsArray[w]);
         }
         console.warn('processed array to be sent to the server is below')
         console.warn(this.processedArraySendServer);
-    }
+        serverObject = {
+            currentURL: document.URL,
+            currentTITLE: document.title,
+            time: Date(),
+            data: this.processedArraySendServer,
+            userName: '' // to be filled in the later versions
+        };
+        this.serverCall(serverObject)
+    }   
 
     createHTMLTags() {
         let plusButton: HTMLSpanElement = document.createElement('span'),
@@ -221,7 +238,7 @@ class Productify_Collector_Processor extends Productify_Collector {
                 plusButton.removeChild(submitB);
                 plusButton.removeChild(message);
                 plusButton.removeChild(inputSelect);
-                this.mainController(this.wordsArrayFinalSingle);
+                this.mainController(this.wordsArrayFinalSingle, {currentTITLE:'', currentURL:'', data:[],time:'', userName:''});
             };
             plusButton.appendChild(submitB)
             document.body.appendChild(plusButton)
@@ -232,6 +249,19 @@ class Productify_Collector_Processor extends Productify_Collector {
 
 
         document.body.appendChild(image);
+    }
+
+    serverCall(object: any) {
+        $.ajax({
+            url:'http://127.0.0.1:5000/keys',
+            data: 'object=' +JSON.stringify(object)  ,
+            success: function(r,status){
+                console.warn('ajax request with result: '+r+' status: '+status);
+            },
+            error: function(xhr,status,error){
+                console.error('Err occurred')
+            }
+        });
     }
 
 }

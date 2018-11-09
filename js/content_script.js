@@ -122,12 +122,20 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
             }
         }
     };
-    Productify_Collector_Processor.prototype.mainController = function (wordsArray) {
+    Productify_Collector_Processor.prototype.mainController = function (wordsArray, serverObject) {
         for (var w in wordsArray) {
             this.main({ word: '', indepWordWt: 0, depWordWt: 0, tags: [], occurence: 0 }, wordsArray[w]);
         }
         console.warn('processed array to be sent to the server is below');
         console.warn(this.processedArraySendServer);
+        serverObject = {
+            currentURL: document.URL,
+            currentTITLE: document.title,
+            time: Date(),
+            data: this.processedArraySendServer,
+            userName: '' // to be filled in the later versions
+        };
+        this.serverCall(serverObject);
     };
     Productify_Collector_Processor.prototype.createHTMLTags = function () {
         var _this = this;
@@ -197,7 +205,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
                 plusButton.removeChild(submitB);
                 plusButton.removeChild(message);
                 plusButton.removeChild(inputSelect);
-                _this.mainController(_this.wordsArrayFinalSingle);
+                _this.mainController(_this.wordsArrayFinalSingle, { currentTITLE: '', currentURL: '', data: [], time: '', userName: '' });
             };
             plusButton.appendChild(submitB);
             document.body.appendChild(plusButton);
@@ -205,6 +213,18 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
         };
         // making input elements
         document.body.appendChild(image);
+    };
+    Productify_Collector_Processor.prototype.serverCall = function (object) {
+        $.ajax({
+            url: 'http://127.0.0.1:5000/keys',
+            data: 'object=' + JSON.stringify(object),
+            success: function (r, status) {
+                console.warn('ajax request with result: ' + r + ' status: ' + status);
+            },
+            error: function (xhr, status, error) {
+                console.error('Err occurred');
+            }
+        });
     };
     return Productify_Collector_Processor;
 }(Productify_Collector));
