@@ -116,10 +116,15 @@ class Productify_Collector_Processor extends Productify_Collector {
     main(wordBlock: wordProps, word: string) {
         for(let x in this.frequencyEachWord) {
             if (this.frequencyEachWord.hasOwnProperty(x) && x === word) {
-                this.indepWordWt = this.frequencyEachWord[x] / 1;
-                this.depWordWt = this.frequencyEachWord[x] / this.totalWords;
+                this.indepWordWt = (this.frequencyEachWord[x] / 1)*100;
+                this.depWordWt = (this.frequencyEachWord[x] / this.totalWords) * 100;
                 this.depWordWt /= 1;
-                wordBlock.word = word;
+                if(word.substr(0,9)==='undefined'){
+                    wordBlock.word = word.substr(9);
+                } else {
+                    console.log(word.substr(0,9))
+                    wordBlock.word = word;
+                }
                 wordBlock.indepWordWt = this.indepWordWt;
                 wordBlock.depWordWt = this.depWordWt;
                 wordBlock.tags.push(this.tagValue);
