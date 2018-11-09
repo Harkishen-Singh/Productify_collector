@@ -3,6 +3,7 @@ interface wordProps {
     indepWordWt: number;
     depWordWt: number;
     tags: string[];
+    occurence: number;
 }
 
 class Productify_Collector {
@@ -13,6 +14,7 @@ class Productify_Collector {
     protected getAllTextFiltered: string;
     private lengthCounter: number=0;
     protected wordsArrayFinal: string[] = new Array();
+    protected wordsArrayFinalSingle: string[] = new Array();
     protected customIcons: any[] = new Array();
 
     constructor() {
@@ -57,16 +59,11 @@ class Productify_Collector {
                     }
                 }
                 if (found===false)
-                    this.wordsArrayFinal.push(arr[ele]);
+                    this.wordsArrayFinalSingle.push(arr[ele]);
+                this.wordsArrayFinal.push(arr[ele]);
             }
         }
         this.totalWords = this.wordsArrayFinal.length;
-        this.displays();
-    }
-
-    displays() {
-        console.warn('Entire wordsArray of the current webpage is below');
-        console.warn(this.wordsArrayFinal);
     }
 
 }
@@ -126,6 +123,7 @@ class Productify_Collector_Processor extends Productify_Collector {
                 wordBlock.indepWordWt = this.indepWordWt;
                 wordBlock.depWordWt = this.depWordWt;
                 wordBlock.tags.push(this.tagValue);
+                wordBlock.occurence = this.frequencyEachWord[x];
                 this.processedArraySendServer.push(wordBlock);
                 return wordBlock;
             }
@@ -134,7 +132,7 @@ class Productify_Collector_Processor extends Productify_Collector {
 
     mainController(wordsArray: string[]) {
         for(let w in wordsArray) {
-            this.main({word:'', indepWordWt:0, depWordWt:0, tags:[]}, wordsArray[w]);
+            this.main({word:'', indepWordWt:0, depWordWt:0, tags:[], occurence:0}, wordsArray[w]);
         }
         console.warn('processed array to be sent to the server is below')
         console.warn(this.processedArraySendServer);
@@ -218,7 +216,7 @@ class Productify_Collector_Processor extends Productify_Collector {
                 plusButton.removeChild(submitB);
                 plusButton.removeChild(message);
                 plusButton.removeChild(inputSelect);
-                this.mainController(this.wordsArrayFinal);
+                this.mainController(this.wordsArrayFinalSingle);
             };
             plusButton.appendChild(submitB)
             document.body.appendChild(plusButton)

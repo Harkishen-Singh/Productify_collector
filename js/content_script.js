@@ -17,6 +17,7 @@ var Productify_Collector = /** @class */ (function () {
         this.wordsArray = new Array();
         this.lengthCounter = 0;
         this.wordsArrayFinal = new Array();
+        this.wordsArrayFinalSingle = new Array();
         this.customIcons = new Array();
         this.getAllText = document.body.innerText;
         this.totalWordsLength = this.getAllText.length;
@@ -57,15 +58,11 @@ var Productify_Collector = /** @class */ (function () {
                     }
                 }
                 if (found === false)
-                    this.wordsArrayFinal.push(arr[ele]);
+                    this.wordsArrayFinalSingle.push(arr[ele]);
+                this.wordsArrayFinal.push(arr[ele]);
             }
         }
         this.totalWords = this.wordsArrayFinal.length;
-        this.displays();
-    };
-    Productify_Collector.prototype.displays = function () {
-        console.warn('Entire wordsArray of the current webpage is below');
-        console.warn(this.wordsArrayFinal);
     };
     return Productify_Collector;
 }());
@@ -113,6 +110,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
                 wordBlock.indepWordWt = this.indepWordWt;
                 wordBlock.depWordWt = this.depWordWt;
                 wordBlock.tags.push(this.tagValue);
+                wordBlock.occurence = this.frequencyEachWord[x];
                 this.processedArraySendServer.push(wordBlock);
                 return wordBlock;
             }
@@ -120,7 +118,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
     };
     Productify_Collector_Processor.prototype.mainController = function (wordsArray) {
         for (var w in wordsArray) {
-            this.main({ word: '', indepWordWt: 0, depWordWt: 0, tags: [] }, wordsArray[w]);
+            this.main({ word: '', indepWordWt: 0, depWordWt: 0, tags: [], occurence: 0 }, wordsArray[w]);
         }
         console.warn('processed array to be sent to the server is below');
         console.warn(this.processedArraySendServer);
@@ -193,7 +191,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
                 plusButton.removeChild(submitB);
                 plusButton.removeChild(message);
                 plusButton.removeChild(inputSelect);
-                _this.mainController(_this.wordsArrayFinal);
+                _this.mainController(_this.wordsArrayFinalSingle);
             };
             plusButton.appendChild(submitB);
             document.body.appendChild(plusButton);
