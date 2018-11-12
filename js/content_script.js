@@ -107,14 +107,14 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
                 this.depWordWt = (this.frequencyEachWord[x] / this.totalWords) * 100;
                 this.depWordWt /= 1;
                 if (word.substr(0, 9) === 'undefined') {
-                    wordBlock.word = word.substr(9);
+                    wordBlock.word = word.substr(9).toLowerCase();
                 }
                 else {
-                    wordBlock.word = word;
+                    wordBlock.word = word.toLowerCase();
                 }
                 wordBlock.indepWordWt = this.indepWordWt;
                 wordBlock.depWordWt = this.depWordWt;
-                wordBlock.tags = (this.tagValue);
+                wordBlock.tags = (this.tagValue).toLowerCase();
                 wordBlock.occurence = this.frequencyEachWord[x];
                 this.processedArraySendServer.push(wordBlock);
                 return wordBlock;
@@ -256,9 +256,8 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
         // });
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
-            if (this.status == 200) {
+            if (this.status == 299) {
                 console.warn(xhttp.response);
-                alert(xhttp.response);
             }
         };
         console.log(JSON.stringify(object));
