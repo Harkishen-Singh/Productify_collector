@@ -24,56 +24,84 @@ app.get('/keys', (req, res) => {
     console.warn('RAW '+input)
         let clientObject = JSON.parse(input);
     console.warn('Received '+clientObject['data'].length+ ' object responses from user : '+clientObject.userName);
-    console.warn('Received from client below')
-    var conn = mongo.connect(uri, (e, dbo) => {
+
+
+
+    mongo.connect(uri, (e, dbo) => {
         if (e) throw e;
         console.warn('Connected!');
         var db = dbo.db('productify_database');
-        db.collection('testing').find({}).toArray((e, result) => {
-            if (e) throw e;
+        db.collection('visitedurls_testing').find({}).toArray((e1, result1) => {
+            if(e1) throw e1;
             else {
-                console.warn('finding collections...');
-                for (let j=0 ; j<clientObject['data'].length; j++) {
-                    let found = false;
-                    for (let i=0 ;i< result.length; i++) {
-                        // console.log(clientObject['data'][j].word +'  '+ result[i].word + ' ' + clientObject['data'][j].tags +' '+ result[i].tags )
-                        if ((clientObject['data'][j].word === result[i].word) && ( clientObject['data'][j].tags === result[i].tags ) ) {
-                            found = true;
-                            console.log('match found')
-                            let updatedObject = {
-                                word: clientObject['data'][j].word,
-                                indepWordWt: result[i].indepWordWt + clientObject['data'][j].indepWordWt,
-                                depWordWt: result[i].depWordWt + clientObject['data'][j].depWordWt,
-                                occurence: result[i].occurence + clientObject['data'][j].occurence,
-                                tags : clientObject['data'][j].tags
-                            };
-                            let setter = {
-                                $set: updatedObject
-                            };
-                            db.collection('testing').updateOne(result[i], setter, e => {
-                                if (e) 
-                                    throw e;
-                                else 
-                                    console.warn('Updated word '+ updatedObject.word);
-                            })
+                let visited = false;
+                for (let x in result1) {
+                    if (clientObject['currentURL'] === result1[x]['url']) {
+                        visited = true;
+                        console.log('website : '+clientObject['currentURL']+' already visited. Skipping...');
+                        dbo.close();
+                        res.status(299);
+                        res.send('Submitted Successfully!');
+                        break;
+                    }
+                }
+                if (visited === false) {
+                    let urlObj = {
+                        url: clientObject['currentURL']
+                    };
+                    db.collection('visitedurls_testing').insertOne(urlObj, e2 => {
+                        console.warn('new website : '+urlObj.url);
+                    });
+                    db.collection('testing').find({}).toArray((e, result) => {
+                        if (e) throw e;
+                        else {
+                            console.warn('finding collections...');
+                            for (let j=0 ; j<clientObject['data'].length; j++) {
+                                let found = false;
+                                for (let i=0 ;i< result.length; i++) {
+                                    if ((clientObject['data'][j].word === result[i].word) && ( clientObject['data'][j].tags === result[i].tags ) ) {
+                                        found = true;
+                                        console.log('match found')
+                                        let updatedObject = {
+                                            word: clientObject['data'][j].word,
+                                            indepWordWt: result[i].indepWordWt + clientObject['data'][j].indepWordWt,
+                                            depWordWt: result[i].depWordWt + clientObject['data'][j].depWordWt,
+                                            occurence: result[i].occurence + clientObject['data'][j].occurence,
+                                            tags : clientObject['data'][j].tags
+                                        };
+                                        let setter = {
+                                            $set: updatedObject
+                                        };
+                                        db.collection('testing').updateOne(result[i], setter, e => {
+                                            if (e) 
+                                                throw e;
+                                            else 
+                                                console.warn('Updated word '+ updatedObject.word);
+                                        })
+                                        break;
+                                    }
+                                }
+                                if (found === false) {
+                                    // here to be written
+                                    db.collection('testing').insertOne(clientObject['data'][j], e => {
+                                        if (e) 
+                                            throw e;
+                                        else {
+                                            console.warn('new word: '+clientObject['data'][j].word);
+                                        }
+                                    })
+                                }
+                                
+                            } dbo.close();
+                            res.status(299);
+                            res.send('Submitted Successfully!');
                         }
-                    }
-                    if (found === false) {
-                        // here to be written
-                        db.collection('testing').insertOne(clientObject['data'][j], e => {
-                            if (e) 
-                                throw e;
-                            else {
-                                console.warn('new word: '+clientObject['data'][j].word);
-                            }
-                        })
-                    }
-                    
-                } dbo.close();
-                res.status(299);
-                res.send('Submitted Successfully!');
+                    });
+                }
             }
-        });
+        })
+
+        
     });
 
     
