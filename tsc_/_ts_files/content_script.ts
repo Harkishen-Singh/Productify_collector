@@ -180,9 +180,19 @@ class Productify_Collector_Processor extends Productify_Collector {
                 opt5: HTMLOptionElement = document.createElement('option'),
                 opt6: HTMLOptionElement = document.createElement('option'),
                 opt7: HTMLOptionElement = document.createElement('option'),
+                opt8: HTMLOptionElement = document.createElement('option'),
                 opt9: HTMLOptionElement = document.createElement('option'),
                 opt10: HTMLOptionElement = document.createElement('option'),
-                opt8: HTMLOptionElement = document.createElement('option');
+                opt11: HTMLOptionElement = document.createElement('option'),
+                opt12: HTMLOptionElement = document.createElement('option'),
+                opt13: HTMLOptionElement = document.createElement('option'),
+                opt14: HTMLOptionElement = document.createElement('option'),
+                opt15: HTMLOptionElement = document.createElement('option'),
+                opt16: HTMLOptionElement = document.createElement('option'),
+                opt17: HTMLOptionElement = document.createElement('option'),
+                opt18: HTMLOptionElement = document.createElement('option'),
+                opt19: HTMLOptionElement = document.createElement('option'),
+                opt20: HTMLOptionElement = document.createElement('option');
             plusButton.style.position = 'fixed';
             plusButton.style.left = '5%';
             plusButton.style.bottom ='10%';
@@ -199,7 +209,17 @@ class Productify_Collector_Processor extends Productify_Collector {
             opt7.value ='study';
             opt8.value ='ecommerce';
             opt9.value = 'socialMedia';
-            opt10.value = 'others';
+            opt10.value = 'searchengine';
+            opt11.value = 'encyclopedia';
+            opt12.value = 'employmentOrientedSocialNetwork';
+            opt13.value = 'onlineOfficeSuite';
+            opt14.value = 'instantMessaging';
+            opt15.value = 'musicStreaming';
+            opt16.value = 'weatherForecasting';
+            opt17.value = 'news';
+            opt18.value = 'technologyProducts';
+            opt19.value = 'paymentSystem';
+            opt20.value = 'others';
             opt1.innerHTML ='Software and Information Technology';
             opt2.innerHTML ='Doctor & Health';
             opt3.innerHTML ='Games';
@@ -207,9 +227,19 @@ class Productify_Collector_Processor extends Productify_Collector {
             opt5.innerHTML ='Lifestyle';
             opt6.innerHTML ='Movies';
             opt7.innerHTML ='Study';
-            opt9.innerHTML = 'Social Media';
             opt8.innerHTML ='E-Commerce';
-            opt10.innerHTML = 'General / Others';
+            opt9.innerHTML = 'Social Media';
+            opt10.innerHTML = 'Search Engine';
+            opt11.innerHTML = 'Encyclopedia';
+            opt12.innerHTML = 'Employment-Oriented Social Network';
+            opt13.innerHTML = 'Online Office Suite';
+            opt14.innerHTML = 'Instant Messaging';
+            opt15.innerHTML = 'Music Streaming';
+            opt16.innerHTML = 'weatherForecasting';
+            opt17.innerHTML = 'News';
+            opt18.innerHTML = 'Technology Products';
+            opt19.innerHTML = 'Payment System';
+            opt20.innerHTML = 'General / Others';
             inputSelect.appendChild(opt1);
             inputSelect.appendChild(opt2);
             inputSelect.appendChild(opt3);
@@ -220,6 +250,16 @@ class Productify_Collector_Processor extends Productify_Collector {
             inputSelect.appendChild(opt8);
             inputSelect.appendChild(opt9);
             inputSelect.appendChild(opt10);
+            inputSelect.appendChild(opt11);
+            inputSelect.appendChild(opt12);
+            inputSelect.appendChild(opt13);
+            inputSelect.appendChild(opt14);
+            inputSelect.appendChild(opt15);
+            inputSelect.appendChild(opt16);
+            inputSelect.appendChild(opt17);
+            inputSelect.appendChild(opt18);
+            inputSelect.appendChild(opt19);
+            inputSelect.appendChild(opt20);
             let message: HTMLParagraphElement = document.createElement('p');
             message.innerHTML = 'Select the <b>most appropriate tag</b> for this Page:<br/>';
             plusButton.appendChild(message)
