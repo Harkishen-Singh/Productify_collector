@@ -16,13 +16,14 @@ app.use((req,res,next)=>{
 app.get('/', (req, res) => {
     res.send('Working');
 });
-
+let count = 0;
 app.get('/keys', (req, res) => {
     let clientObject = JSON.parse(req.query.object);
     console.warn('Received from client below')
     console.warn(clientObject);
-    res.status(100);
-    res.send('Thanks!');
+    res.status(200);
+    res.send('Submitted Successfully!');
+    console.log('count :' + ++count)
 });
 
 const server = app.listen(port, host, e => {

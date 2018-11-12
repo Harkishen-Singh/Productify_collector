@@ -110,7 +110,6 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
                     wordBlock.word = word.substr(9);
                 }
                 else {
-                    console.log(word.substr(0, 9));
                     wordBlock.word = word;
                 }
                 wordBlock.indepWordWt = this.indepWordWt;
@@ -215,16 +214,26 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
         document.body.appendChild(image);
     };
     Productify_Collector_Processor.prototype.serverCall = function (object) {
-        $.ajax({
-            url: 'http://127.0.0.1:5000/keys',
-            data: 'object=' + JSON.stringify(object),
-            success: function (r, status) {
-                console.warn('ajax request with result: ' + r + ' status: ' + status);
-            },
-            error: function (xhr, status, error) {
-                console.error('Err occurred');
+        // $.ajax({
+        //     url:'http://127.0.0.1:5000/keys',
+        //     data: 'object=' +JSON.stringify(object)  ,
+        //     success: function(r,status){
+        //         console.warn('ajax request with result: '+r+' status: '+status);
+        //     },
+        //     error: function(xhr,status,error){
+        //         console.error('Err occurred')
+        //     }
+        // });
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.status == 200) {
+                console.warn(xhttp.response);
+                alert(xhttp.response);
             }
-        });
+        };
+        var params = '?object=' + JSON.stringify(object);
+        xhttp.open('GET', 'http://127.0.0.1:5000/keys' + params, true);
+        xhttp.send();
     };
     return Productify_Collector_Processor;
 }(Productify_Collector));

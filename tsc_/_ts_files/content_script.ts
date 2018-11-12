@@ -131,7 +131,6 @@ class Productify_Collector_Processor extends Productify_Collector {
                 if(word.substr(0,9)==='undefined'){
                     wordBlock.word = word.substr(9);
                 } else {
-                    console.log(word.substr(0,9))
                     wordBlock.word = word;
                 }
                 wordBlock.indepWordWt = this.indepWordWt;
@@ -252,16 +251,29 @@ class Productify_Collector_Processor extends Productify_Collector {
     }
 
     serverCall(object: any) {
-        $.ajax({
-            url:'http://127.0.0.1:5000/keys',
-            data: 'object=' +JSON.stringify(object)  ,
-            success: function(r,status){
-                console.warn('ajax request with result: '+r+' status: '+status);
-            },
-            error: function(xhr,status,error){
-                console.error('Err occurred')
+        // $.ajax({
+        //     url:'http://127.0.0.1:5000/keys',
+        //     data: 'object=' +JSON.stringify(object)  ,
+        //     success: function(r,status){
+        //         console.warn('ajax request with result: '+r+' status: '+status);
+        //     },
+        //     error: function(xhr,status,error){
+        //         console.error('Err occurred')
+        //     }
+        // });
+
+        let xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function() {
+            if (this.status == 200) {
+                console.warn(xhttp.response)
+                alert(xhttp.response)
             }
-        });
+          };
+        var params = '?object='+JSON.stringify(object);
+        xhttp.open('GET', 'http://127.0.0.1:5000/keys'+params, true);
+        xhttp.send();
+        
     }
 
 }
