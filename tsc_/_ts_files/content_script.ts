@@ -299,9 +299,9 @@ class Productify_Collector_Processor extends Productify_Collector {
                 console.warn(xhttp.response)
             }
           };
-        console.log(JSON.stringify(object))
         var params = '?object='+JSON.stringify(object);
         xhttp.open('POST', 'https://productify-server.herokuapp.com/keys'+params, true);
+        // xhttp.open('POST', 'http://18.224.229.228:5000/keys'+params, true);
         xhttp.send();
         
     }
