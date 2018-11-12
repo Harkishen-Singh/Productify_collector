@@ -9,7 +9,7 @@
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
         "contextMenus","tts","storage","notifications","webRequest","webRequestBlocking",
-        "storage","notifications","webRequest","webRequestBlocking","<all_urls>","tabs","unlimitedStorage","http://127.0.0.1:5000/*"
+        "storage","notifications","webRequest","webRequestBlocking","<all_urls>","tabs","unlimitedStorage","https://productify-server.herokuapp.com/*"
     ],
     "options_page":"templates/options.html",
     "content_scripts": [
