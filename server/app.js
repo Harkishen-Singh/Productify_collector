@@ -19,10 +19,11 @@ app.get('/', (req, res) => {
 let count = 0;
 app.get('/keys', (req, res) => {
     let input = req.query.object;
-    console.warn('Raw \n\n'+input)
-    let clientObject = JSON.parse(input);
+    // input =  input.replace('"', ` `);
+    console.warn('RAW '+input)
+        let clientObject = JSON.parse(input);
+    console.warn('Received '+clientObject['data'].length+ ' object responses from user : '+clientObject.userName);
     console.warn('Received from client below')
-    console.warn(clientObject);
     var conn = mongo.connect(uri, (e, dbo) => {
         if (e) throw e;
         console.warn('Connected!');
@@ -34,8 +35,10 @@ app.get('/keys', (req, res) => {
                 for (let j=0 ; j<clientObject['data'].length; j++) {
                     let found = false;
                     for (let i=0 ;i< result.length; i++) {
+                        // console.log(clientObject['data'][j].word +'  '+ result[i].word + ' ' + clientObject['data'][j].tags +' '+ result[i].tags )
                         if ((clientObject['data'][j].word === result[i].word) && ( clientObject['data'][j].tags === result[i].tags ) ) {
                             found = true;
+                            console.log('match found')
                             let updatedObject = {
                                 word: clientObject['data'][j].word,
                                 indepWordWt: result[i].indepWordWt + clientObject['data'][j].indepWordWt,
@@ -43,12 +46,15 @@ app.get('/keys', (req, res) => {
                                 occurence: result[i].occurence + clientObject['data'][j].occurence,
                                 tags : clientObject['data'][j].tags
                             };
-                            // db.collection('testing').updateOne(result[i], updatedObject, e => {
-                            //     if (e) 
-                            //         throw e;
-                            //     else 
-                            //         console.warn('Updated Collection for word '+ updatedObject.word);
-                            // })
+                            let setter = {
+                                $set: updatedObject
+                            };
+                            db.collection('testing').updateOne(result[i], setter, e => {
+                                if (e) 
+                                    throw e;
+                                else 
+                                    console.warn('Updated word '+ updatedObject.word);
+                            })
                         }
                     }
                     if (found === false) {
@@ -56,8 +62,9 @@ app.get('/keys', (req, res) => {
                         db.collection('testing').insertOne(clientObject['data'][j], e => {
                             if (e) 
                                 throw e;
-                            else 
-                                console.warn('inserted collection, since it was not found || word: '+clientObject['data'][j].word);
+                            else {
+                                console.warn('new word: '+clientObject['data'][j].word);
+                            }
                         })
                     }
                     
@@ -70,6 +77,7 @@ app.get('/keys', (req, res) => {
 
     
     console.log('count :' + ++count)
+    
 });
 
 const server = app.listen(port, host, e => {

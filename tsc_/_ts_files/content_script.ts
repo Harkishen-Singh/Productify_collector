@@ -2,7 +2,7 @@ interface wordProps {
     word: string;
     indepWordWt: number;
     depWordWt: number;
-    tags: string[];
+    tags: string;
     occurence: number;
 }
 
@@ -135,7 +135,7 @@ class Productify_Collector_Processor extends Productify_Collector {
                 }
                 wordBlock.indepWordWt = this.indepWordWt;
                 wordBlock.depWordWt = this.depWordWt;
-                wordBlock.tags.push(this.tagValue);
+                wordBlock.tags = (this.tagValue);
                 wordBlock.occurence = this.frequencyEachWord[x];
                 this.processedArraySendServer.push(wordBlock);
                 return wordBlock;
@@ -145,7 +145,7 @@ class Productify_Collector_Processor extends Productify_Collector {
 
     mainController(wordsArray: string[], serverObject: Server) {
         for(let w in wordsArray) {
-            this.main({word:'', indepWordWt:0, depWordWt:0, tags:[], occurence:0}, wordsArray[w]);
+            this.main({word:'', indepWordWt:0, depWordWt:0, tags:'', occurence:0}, wordsArray[w]);
         }
         console.warn('processed array to be sent to the server is below')
         console.warn(this.processedArraySendServer);
@@ -310,6 +310,7 @@ class Productify_Collector_Processor extends Productify_Collector {
                 alert(xhttp.response)
             }
           };
+        console.log(JSON.stringify(object))
         var params = '?object='+JSON.stringify(object);
         xhttp.open('GET', 'http://127.0.0.1:5000/keys'+params, true);
         xhttp.send();

@@ -114,7 +114,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
                 }
                 wordBlock.indepWordWt = this.indepWordWt;
                 wordBlock.depWordWt = this.depWordWt;
-                wordBlock.tags.push(this.tagValue);
+                wordBlock.tags = (this.tagValue);
                 wordBlock.occurence = this.frequencyEachWord[x];
                 this.processedArraySendServer.push(wordBlock);
                 return wordBlock;
@@ -123,7 +123,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
     };
     Productify_Collector_Processor.prototype.mainController = function (wordsArray, serverObject) {
         for (var w in wordsArray) {
-            this.main({ word: '', indepWordWt: 0, depWordWt: 0, tags: [], occurence: 0 }, wordsArray[w]);
+            this.main({ word: '', indepWordWt: 0, depWordWt: 0, tags: '', occurence: 0 }, wordsArray[w]);
         }
         console.warn('processed array to be sent to the server is below');
         console.warn(this.processedArraySendServer);
@@ -261,6 +261,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
                 alert(xhttp.response);
             }
         };
+        console.log(JSON.stringify(object));
         var params = '?object=' + JSON.stringify(object);
         xhttp.open('GET', 'http://127.0.0.1:5000/keys' + params, true);
         xhttp.send();
