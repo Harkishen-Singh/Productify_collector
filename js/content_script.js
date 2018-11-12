@@ -244,16 +244,6 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
         document.body.appendChild(image);
     };
     Productify_Collector_Processor.prototype.serverCall = function (object) {
-        // $.ajax({
-        //     url:'http://127.0.0.1:5000/keys',
-        //     data: 'object=' +JSON.stringify(object)  ,
-        //     success: function(r,status){
-        //         console.warn('ajax request with result: '+r+' status: '+status);
-        //     },
-        //     error: function(xhr,status,error){
-        //         console.error('Err occurred')
-        //     }
-        // });
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.status == 299) {
@@ -262,7 +252,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
         };
         console.log(JSON.stringify(object));
         var params = '?object=' + JSON.stringify(object);
-        xhttp.open('GET', 'https://productify-server.herokuapp.com/keys' + params, true);
+        xhttp.open('POST', 'https://productify-server.herokuapp.com/keys' + params, true);
         xhttp.send();
     };
     return Productify_Collector_Processor;

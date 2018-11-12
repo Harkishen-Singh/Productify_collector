@@ -291,16 +291,6 @@ class Productify_Collector_Processor extends Productify_Collector {
     }
 
     serverCall(object: any) {
-        // $.ajax({
-        //     url:'http://127.0.0.1:5000/keys',
-        //     data: 'object=' +JSON.stringify(object)  ,
-        //     success: function(r,status){
-        //         console.warn('ajax request with result: '+r+' status: '+status);
-        //     },
-        //     error: function(xhr,status,error){
-        //         console.error('Err occurred')
-        //     }
-        // });
 
         let xhttp = new XMLHttpRequest();
         
@@ -311,7 +301,7 @@ class Productify_Collector_Processor extends Productify_Collector {
           };
         console.log(JSON.stringify(object))
         var params = '?object='+JSON.stringify(object);
-        xhttp.open('GET', 'https://productify-server.herokuapp.com/keys'+params, true);
+        xhttp.open('POST', 'https://productify-server.herokuapp.com/keys'+params, true);
         xhttp.send();
         
     }

@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
     res.send('Working');
 });
 let count = 0;
-app.get('/keys', (req, res) => {
+app.post('/keys', (req, res) => {
     let input = req.query.object;
     // input =  input.replace('"', ` `);
     console.warn('RAW '+input)
