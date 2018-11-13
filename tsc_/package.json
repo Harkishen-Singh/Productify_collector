@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@types/chrome": "0.0.75",
-    "@types/jquery": "^3.3.22"
+    "@types/jquery": "^3.3.22",
+    "@types/socket.io": "^2.1.0",
+    "@types/socket.io-client": "^1.4.32"
   }
 }

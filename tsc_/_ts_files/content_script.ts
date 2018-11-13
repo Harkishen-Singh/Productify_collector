@@ -1,3 +1,5 @@
+
+
 interface wordProps {
     word: string;
     indepWordWt: number;
@@ -292,18 +294,27 @@ class Productify_Collector_Processor extends Productify_Collector {
 
     serverCall(object: any) {
 
-        let xhttp = new XMLHttpRequest();
+        // let xhttp = new XMLHttpRequest();
         
-        xhttp.onreadystatechange = function() {
-            if (this.status == 299) {
-                console.warn(xhttp.response)
-            }
-          };
-        var params = '?object='+JSON.stringify(object);
-        xhttp.open('POST', 'https://productify-server.herokuapp.com/keys'+params, true);
-        // xhttp.open('POST', 'http://18.224.229.228:5000/keys'+params, true);
-        xhttp.send();
+        // xhttp.onreadystatechange = function() {
+        //     if (this.status == 299) {
+        //         console.warn(xhttp.response)
+        //     }
+        //   };
+        // var params = '?object='+JSON.stringify(object);
+        // xhttp.open('POST', 'http://0.0.0.0:5000/keys'+params, true);
+        // // xhttp.open('POST', 'http://18.224.229.228:5000/keys'+params, true);
+        // xhttp.send();
         
+
+
+        // socket codes
+        var socket = io.connect('https://productify-server.herokuapp.com/');
+        socket.emit('datamessage', {
+            message: JSON.stringify(object)
+        });
+
+
     }
 
 }

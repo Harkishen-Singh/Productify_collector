@@ -244,16 +244,21 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
         document.body.appendChild(image);
     };
     Productify_Collector_Processor.prototype.serverCall = function (object) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.status == 299) {
-                console.warn(xhttp.response);
-            }
-        };
-        var params = '?object=' + JSON.stringify(object);
-        xhttp.open('POST', 'https://productify-server.herokuapp.com/keys' + params, true);
-        // xhttp.open('POST', 'http://18.224.229.228:5000/keys'+params, true);
-        xhttp.send();
+        // let xhttp = new XMLHttpRequest();
+        // xhttp.onreadystatechange = function() {
+        //     if (this.status == 299) {
+        //         console.warn(xhttp.response)
+        //     }
+        //   };
+        // var params = '?object='+JSON.stringify(object);
+        // xhttp.open('POST', 'http://0.0.0.0:5000/keys'+params, true);
+        // // xhttp.open('POST', 'http://18.224.229.228:5000/keys'+params, true);
+        // xhttp.send();
+        // socket codes
+        var socket = io.connect('https://productify-server.herokuapp.com/');
+        socket.emit('datamessage', {
+            message: JSON.stringify(object)
+        });
     };
     return Productify_Collector_Processor;
 }(Productify_Collector));
