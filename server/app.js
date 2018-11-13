@@ -6,7 +6,9 @@ const app = require('express')(),
     // uri = 'mongodb://127.0.0.1:27017',
     uri='mongodb+srv://harkishen:Bbsr131@cluster0-y5bau.mongodb.net/productivity_database?retryWrites=true'
     bodyParser = require('body-parser');
-
+const definesEnglish = require('./stopwords');
+const stopwords = definesEnglish.stopwords,
+    alhpaLetters = definesEnglish.englishAlpha;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended:true, }));
 app.use((req,res,next)=>{
@@ -84,13 +86,35 @@ app.post('/keys', (req, res) => {
                                 }
                                 if (found === false) {
                                     // here to be written
-                                    db.collection('testing').insertOne(clientObject['data'][j], e => {
-                                        if (e) 
-                                            throw e;
-                                        else {
-                                            console.warn('new word: '+clientObject['data'][j].word);
+                                    let isStopWord = false;
+                                    for (let stops in stopwords) {
+                                        if (stopwords[stops] === clientObject['data'][j]['word']) {
+                                            isStopWord = true;
+                                            console.warn('stopword found : '+clientObject['data'][j]['word']);
+                                            break;
                                         }
-                                    })
+                                    }
+                                    if (!isStopWord) {
+                                        let isAlpha = false;
+                                        for (let alhpa in alhpaLetters) {
+                                            if (alhpaLetters[alhpa] === clientObject['data'][j]['word']) {
+                                                isAlpha = true;
+                                                console.warn('alphabet found : '+clientObject['data'][j]['word']);
+                                                break;
+                                            }
+                                        }
+                                        if (!isAlpha) {
+                                            db.collection('testing').insertOne(clientObject['data'][j], e => {
+                                                if (e) 
+                                                    throw e;
+                                                else {
+                                                    console.warn('new word: '+clientObject['data'][j].word);
+                                                }
+                                            });
+                                        }
+                                        
+                                    }
+                                    
                                 }
                                 
                             } dbo.close();
@@ -185,13 +209,35 @@ io.on('connection', sock => {
                                     }
                                     if (found === false) {
                                         // here to be written
-                                        db.collection('testing').insertOne(clientObject['data'][j], e => {
-                                            if (e) 
-                                                throw e;
-                                            else {
-                                                console.warn('new word: '+clientObject['data'][j].word);
+                                        let isStopWord = false;
+                                        for (let stops in stopwords) {
+                                            if (stopwords[stops] === clientObject['data'][j]['word']) {
+                                                isStopWord = true;
+                                                console.warn('stopword found : '+clientObject['data'][j]['word']);
+                                                break;
                                             }
-                                        })
+                                        }
+                                        if (!isStopWord) {
+                                            let isAlpha = false;
+                                            for (let alhpa in alhpaLetters) {
+                                                if (alhpaLetters[alhpa] === clientObject['data'][j]['word']) {
+                                                    isAlpha = true;
+                                                    console.warn('alphabet found : '+clientObject['data'][j]['word']);
+                                                    break;
+                                                }
+                                            }
+                                            if (!isAlpha) {
+                                                db.collection('testing').insertOne(clientObject['data'][j], e => {
+                                                    if (e) 
+                                                        throw e;
+                                                    else {
+                                                        console.warn('new word: '+clientObject['data'][j].word);
+                                                    }
+                                                });
+                                            }
+                                            
+                                        }
+                                        
                                     }
                                     
                                 } dbo.close();
