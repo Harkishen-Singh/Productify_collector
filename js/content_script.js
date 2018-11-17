@@ -150,6 +150,9 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
         image.style.height = "50px";
         image.onclick = function () {
             var inputSelect = document.createElement('select'), opt1 = document.createElement('option'), opt2 = document.createElement('option'), opt3 = document.createElement('option'), opt4 = document.createElement('option'), opt5 = document.createElement('option'), opt6 = document.createElement('option'), opt7 = document.createElement('option'), opt8 = document.createElement('option'), opt9 = document.createElement('option'), opt10 = document.createElement('option'), opt11 = document.createElement('option'), opt12 = document.createElement('option'), opt13 = document.createElement('option'), opt14 = document.createElement('option'), opt15 = document.createElement('option'), opt16 = document.createElement('option'), opt17 = document.createElement('option'), opt18 = document.createElement('option'), opt19 = document.createElement('option'), opt20 = document.createElement('option');
+            var a = document.createElement('select'), b = document.createElement('option');
+            a.appendChild(b);
+            opt1.appendChild(a);
             plusButton.style.position = 'fixed';
             plusButton.style.left = '5%';
             plusButton.style.bottom = '10%';
@@ -198,6 +201,7 @@ var Productify_Collector_Processor = /** @class */ (function (_super) {
             opt19.innerHTML = 'Payment System';
             opt20.innerHTML = 'General / Others';
             inputSelect.appendChild(opt1);
+            opt1.appendChild(opt11);
             inputSelect.appendChild(opt2);
             inputSelect.appendChild(opt3);
             inputSelect.appendChild(opt4);

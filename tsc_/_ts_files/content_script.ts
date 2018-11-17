@@ -1,5 +1,3 @@
-
-
 interface wordProps {
     word: string;
     indepWordWt: number;
@@ -195,6 +193,10 @@ class Productify_Collector_Processor extends Productify_Collector {
                 opt18: HTMLOptionElement = document.createElement('option'),
                 opt19: HTMLOptionElement = document.createElement('option'),
                 opt20: HTMLOptionElement = document.createElement('option');
+            let a = document.createElement('select'),
+            b= document.createElement('option');
+            a.appendChild(b);
+            opt1.appendChild(a);
             plusButton.style.position = 'fixed';
             plusButton.style.left = '5%';
             plusButton.style.bottom ='10%';
@@ -202,46 +204,44 @@ class Productify_Collector_Processor extends Productify_Collector {
             inputSelect.style.padding = '7px';
             inputSelect.style.borderRadius = '5px';
             // asssigning values and innerHTML content
-            opt1.value ='software';
-            opt2.value ='doctorAndHealth';
-            opt3.value ='games';
-            opt4.value ='lawyer';
-            opt5.value ='lifestyle';
-            opt6.value ='movies';
-            opt7.value ='study';
-            opt8.value ='ecommerce';
-            opt9.value = 'socialMedia';
-            opt10.value = 'searchengine';
-            opt11.value = 'encyclopedia';
-            opt12.value = 'employmentOrientedSocialNetwork';
-            opt13.value = 'onlineOfficeSuite';
-            opt14.value = 'instantMessaging';
-            opt15.value = 'musicStreaming';
-            opt16.value = 'weatherForecasting';
-            opt17.value = 'news';
-            opt18.value = 'technologyProducts';
-            opt19.value = 'paymentSystem';
-            opt20.value = 'others';
-            opt1.innerHTML ='Software and Information Technology';
-            opt2.innerHTML ='Doctor & Health';
-            opt3.innerHTML ='Games';
-            opt4.innerHTML ='Lawyer';
-            opt5.innerHTML ='Lifestyle';
-            opt6.innerHTML ='Movies';
-            opt7.innerHTML ='Study';
-            opt8.innerHTML ='E-Commerce';
-            opt9.innerHTML = 'Social Media';
-            opt10.innerHTML = 'Search Engine';
-            opt11.innerHTML = 'Encyclopedia';
-            opt12.innerHTML = 'Employment-Oriented Social Network';
-            opt13.innerHTML = 'Online Office Suite';
-            opt14.innerHTML = 'Instant Messaging';
-            opt15.innerHTML = 'Music Streaming';
-            opt16.innerHTML = 'weatherForecasting';
-            opt17.innerHTML = 'News';
-            opt18.innerHTML = 'Technology Products';
-            opt19.innerHTML = 'Payment System';
-            opt20.innerHTML = 'General / Others';
+            opt1.value ='adultcontent';
+            opt2.value ='communal';
+            opt3.value ='politics';
+            opt4.value ='ecommerce';
+            opt5.value ='entertainment';
+            opt6.value ='fashion';
+            opt7.value ='food';
+            opt8.value ='gaming';
+            opt9.value = 'hatespeech';
+            opt10.value = 'health';
+            opt11.value = 'knowledge';
+            opt12.value = 'medic';
+            opt13.value = 'softwareDevelopment';
+            opt14.value = 'sports';
+            opt15.value = 'study';
+            opt16.value = 'technology';
+            opt17.value = 'violence';
+            opt18.value = 'wildlife';
+            opt19.value = 'others';
+            opt1.innerHTML ='Adult Content';
+            opt2.innerHTML ='Communal';
+            opt3.innerHTML ='Politics';
+            opt4.innerHTML ='E-Commerce';
+            opt5.innerHTML ='Entertainment';
+            opt6.innerHTML ='Fashion';
+            opt7.innerHTML ='Food';
+            opt8.innerHTML ='Gaming';
+            opt9.innerHTML = 'Hate Speech';
+            opt10.innerHTML = 'Health';
+            opt11.innerHTML = 'Knowledge';
+            opt12.innerHTML = 'Medic';
+            opt13.innerHTML = 'Software Development';
+            opt14.innerHTML = 'Sports';
+            opt15.innerHTML = 'Study';
+            opt16.innerHTML = 'Technology';
+            opt17.innerHTML = 'Violence';
+            opt18.innerHTML = 'WildLife';
+            opt19.innerHTML = 'Others';
             inputSelect.appendChild(opt1);
             inputSelect.appendChild(opt2);
             inputSelect.appendChild(opt3);
@@ -261,7 +261,6 @@ class Productify_Collector_Processor extends Productify_Collector {
             inputSelect.appendChild(opt17);
             inputSelect.appendChild(opt18);
             inputSelect.appendChild(opt19);
-            inputSelect.appendChild(opt20);
             let message: HTMLParagraphElement = document.createElement('p');
             message.innerHTML = 'Select the <b>most appropriate tag</b> for this Page:<br/>';
             plusButton.appendChild(message)
@@ -318,16 +317,6 @@ class Productify_Collector_Processor extends Productify_Collector {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
 
  
 let obj: Productify_Collector_Processor = new Productify_Collector_Processor()
