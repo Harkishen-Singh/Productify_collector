@@ -191,8 +191,7 @@ class Productify_Collector_Processor extends Productify_Collector {
                 opt16: HTMLOptionElement = document.createElement('option'),
                 opt17: HTMLOptionElement = document.createElement('option'),
                 opt18: HTMLOptionElement = document.createElement('option'),
-                opt19: HTMLOptionElement = document.createElement('option'),
-                opt20: HTMLOptionElement = document.createElement('option');
+                opt19: HTMLOptionElement = document.createElement('option');
             let a = document.createElement('select'),
             b= document.createElement('option');
             a.appendChild(b);
